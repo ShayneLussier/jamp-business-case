@@ -329,9 +329,10 @@
     </ol>
     
     <h3 id="trade-off">Trade-off</h3>
+    <p>We must move our DNS management to Cloudflare.</p>
     <p>Think of DNS as the internet's phone book. When you type "jamppharma.com" into a browser, DNS is what translates that name into the actual IP address where the website is hosted.</p>
     <p>Cloudflare can read the active DNS settings from our current provider and copy them over. We just update a setting to say "Cloudflare is managing this now".</p>
-    <p><strong>DNS is a "set it and forget it" service. Most companies don't touch it for years after setting it up.</strong></p>
+    <p><strong>DNS is a "set it and forget it" service. Most companies don't touch it for years after setting it up. There should be no apparent reason preventing us from changing to Cloudflare.</strong></p>
     
     <h3 id="recommendation-1">Recommendation</h3>
     <p>Use Cloudflare R2. The savings are substantial in the long-term and the service is reliable. Cloudflare powers ~40% of internet traffic among the top 1,000 most visited websites globally. This is the only case where a service is so much better than the Google alternative that it's worth the tradeoff.</p>
