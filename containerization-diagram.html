@@ -28,8 +28,8 @@
             </svg>
         );
         
-        const ArrowRight = ({ className }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        const ArrowRight = ({ className, style }) => (
+            <svg className={className} style={style} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
         );
@@ -80,25 +80,40 @@
                 </div>
 
                 {/* Visual Flow */}
-                <div className="flex items-center justify-center gap-4 py-8">
-                  <div className="text-center">
+                <div className="py-8">
+                  {/* Container in the center */}
+                  <div className="flex justify-center mb-8">
                     <div className="bg-blue-600 rounded-lg p-6 text-white shadow-lg">
                       <Package className="w-16 h-16 mx-auto mb-2" />
-                      <div className="font-bold text-lg">Our Website</div>
-                      <div className="text-xs opacity-90 mt-1">Same package</div>
+                      <div className="font-bold text-lg">Our Website Container</div>
+                      <div className="text-xs opacity-90 mt-1">One package, works everywhere</div>
                     </div>
                   </div>
 
-                  <ArrowRight className="w-8 h-8 text-slate-400" />
-
-                  <div className="text-center">
-                    <div className={`${platforms.find(p => p.id === selectedPlatform)?.color} rounded-lg p-6 text-white shadow-lg`}>
-                      <Server className="w-16 h-16 mx-auto mb-2" />
-                      <div className="font-bold text-lg">
-                        {platforms.find(p => p.id === selectedPlatform)?.name}
+                  {/* Arrows pointing to all platforms */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {platforms.map(platform => (
+                      <div key={platform.id} className="text-center">
+                        <div className="flex flex-col items-center">
+                          <ArrowRight className={`w-6 h-6 mb-2 transition-all ${
+                            selectedPlatform === platform.id ? 'text-green-500 scale-125' : 'text-slate-300'
+                          }`} style={{ transform: 'rotate(90deg)' }} />
+                          <div className={`${platform.color} rounded-lg p-4 text-white shadow-lg transition-all ${
+                            selectedPlatform === platform.id ? 'ring-4 ring-green-400 scale-105' : 'opacity-60'
+                          }`}>
+                            <Server className="w-12 h-12 mx-auto mb-2" />
+                            <div className="font-bold text-sm">{platform.name}</div>
+                            {selectedPlatform === platform.id && (
+                              <div className="text-xs opacity-90 mt-1">✓ Active</div>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-xs opacity-90 mt-1">Runs identically</div>
-                    </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 text-center text-sm text-slate-600">
+                    The same container deploys to any platform you choose
                   </div>
                 </div>
 
