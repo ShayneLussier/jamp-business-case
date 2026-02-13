@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ordering Platform Business Case</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            margin-top: 30px;
+            color: #333;
+        }
+        
+        h3 {
+            color: #555;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 30px 0;
+        }
+        
+        .skip-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .skip-button:hover {
+            background-color: #45a049;
+        }
+        
+        .toggle-diagram-button {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 15px 0;
+            transition: background-color 0.3s;
+        }
+        
+        .toggle-diagram-button:hover {
+            background-color: #0b7dda;
+        }
+        
+        .diagram-container {
+            display: none;
+            margin: 20px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .diagram-container.show {
+            display: block;
+        }
+        
+        ul {
+            line-height: 1.8;
+        }
+        
+        strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="ordering-platform-business-case">Ordering Platform Business Case</h1>
+    
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+        <li><a href="#infrastructure-google-cloud-platform">Infrastructure: Google Cloud Platform</a>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#why-google-cloud">Why Google Cloud</a></li>
+                <li><a href="#trade-offs">Trade-offs</a></li>
+                <li><a href="#recommendation">Recommendation</a></li>
+                <li><a href="#what-i-need">What I need</a></li>
+            </ul>
+        </li>
+        <li><a href="#cdn-cloudflare-r2-for-product-image-delivery">CDN: Cloudflare R2 for Product Image Delivery</a>
+            <ul>
+                <li><a href="#use">Use</a></li>
+                <li><a href="#why-cloudflare-r2">Why Cloudflare R2</a></li>
+                <li><a href="#trade-off">Trade-off</a></li>
+                <li><a href="#recommendation-1">Recommendation</a></li>
+                <li><a href="#what-i-need-1">What I need</a></li>
+            </ul>
+        </li>
+    </ul>
+    
+    <hr>
+    
+    <h2 id="infrastructure-google-cloud-platform">Infrastructure: Google Cloud Platform</h2>
+    
+    <h3 id="overview">Overview</h3>
+    <p>Our pharma ordering platform requires several components: a website for customers, a database to store orders and products, a system to handle background tasks, and automated functions that respond to user input. These components need to work together reliably and securely.</p>
+    <p>While JAMP's current architecture is with Azure (Microsoft), I am most experienced and comfortable with Google Cloud. Since IT doesn't have the capacity to contribute to development on this project, learning an alternative platform would only increase development time.</p>
+    
+    <h3 id="why-google-cloud">Why Google Cloud</h3>
+    <p><strong>Integrated ecosystem:</strong> All services are pre-configured to communicate with each other without custom integration work. The website automatically connects to the database. No additional configuration required. This removes weeks of setup time that would otherwise be spent on networking between services.</p>
+    <p><strong>Faster time to market:</strong> Less infrastructure complexity means more development time focused on business features rather than technical plumbing.</p>
+    
+    <h3 id="trade-offs">Trade-offs</h3>
+    <p><strong>Platform commitment:</strong> The architecture will use modular, portable components. If migration becomes necessary, the core application code remains unchanged; only infrastructure configuration needs updating. We are not stuck with our initial platform choice forever.</p>
+    
+    <button class="toggle-diagram-button" onclick="toggleDiagram()">
+        <span id="diagram-button-text">▶ Show Containerization Diagram</span>
+    </button>
+    
+    <div id="diagram-container" class="diagram-container">
+        <iframe src="containerization-diagram.html" width="100%" height="900" frameborder="0"></iframe>
+    </div>
+    
+    <h3 id="recommendation">Recommendation</h3>
+    <p>Use Google Cloud. The development time will be significantly lessened and it will be easier to train users on how to maintain / edit the platform moving forward. Creating documentation will also be easier.</p>
+    
+    <h3 id="what-i-need">What I need</h3>
+    <p><strong>IT to create a JAMP Google Cloud account as admin and add me as a member to build the project. No payment method needed immediately since the account comes with free credits. There is no barrier to doing this right now.</strong></p>
+    
+    <hr>
+    
+    <p>Technical explanation of services - <strong>YOU CAN SKIP THIS PART</strong>
+    <button class="skip-button" onclick="location.href='#cdn-cloudflare-r2-for-product-image-delivery'">Skip to Cloudflare R2 Section →</button></p>
+    
+    <p>This is a breakdown of the Google specific services I am planning on using:</p>
+    
+    <pre><h3>Service Breakdown</h3>
+
+<strong>Cloud Run</strong> - Web application hosting
+- Hosts the ordering platform interface - the actual website
+- Automatically scales to handle traffic fluctuations
+- Pay-per-use pricing (when there are no users, there is no charge)
+
+<strong>Cloud SQL for PostgreSQL</strong> - Database
+- Stores orders, products, inventory, and customer data
+- Automated backups
+- PostgreSQL is by far the leading relational database solution, widely adopted for its reliability and performance
+
+<strong>Cloud Tasks</strong> - Background job processing
+- Manages order processing, inventory updates, and scheduled tasks
+- Guarantees task completion with automatic retry logic
+- Ensures no jobs are lost during system failures
+
+<strong>Cloud Functions</strong> - Event-driven automation
+- Triggers automated actions (email notifications, inventory sync, reporting)
+- Executes only when needed, minimizing costs
+
+<strong>Cloud Storage</strong> - Temporary file storage
+- Intermediary storage for file uploads during processing
+- Supporting infrastructure, not a core platform component
+
+<strong>Memorystore (Redis)</strong> - In-memory caching
+- Provides fast, low-latency access to frequently used data (e.g., session data, product catalog, inventory counts)
+- Reduces load on Cloud SQL and speeds up user-facing operations</pre>
+    
+    <hr>
+    
+    <h2 id="cdn-cloudflare-r2-for-product-image-delivery">CDN: Cloudflare R2 for Product Image Delivery</h2>
+    
+    <h3 id="use">Use</h3>
+    <p>To serve product images to our website visitors. Every time someone views a product, we deliver web optimized versions of the images. We also maintain version history of these images.</p>
+    <ul>
+        <li><strong>Images will be available for all future JAMP projects (ex: Back in stock emails)</strong></li>
+        <li><strong>THIS IS ONLY FOR PUBLIC FACING ASSETS</strong></li>
+    </ul>
+    
+    <h3 id="why-cloudflare-r2">Why Cloudflare R2</h3>
+    <p><strong>Monthly Cost Breakdown:</strong></p>
+    <p>The bulk of our image uploads will be done during the initial setup, then 2-3 images per new product as they are launched. Image uploads are independent of website views, you can be in the Light scenario for image uploads but Heavy scenario for website views in a given month.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Scenario</th>
+                <th>Image Uploads</th>
+                <th>Website Views</th>
+                <th>Platform</th>
+                <th>Monthly Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Light</td>
+                <td>300</td>
+                <td>1,000</td>
+                <td>Cloudflare</td>
+                <td>$0.03</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Google</td>
+                <td>$18.08</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Azure</td>
+                <td>$35.07</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Medium</td>
+                <td>3,000</td>
+                <td>100,000</td>
+                <td>Cloudflare</td>
+                <td>$0.30</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Google</td>
+                <td>$19.50</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Azure</td>
+                <td>$36.52</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Heavy</td>
+                <td>15,000</td>
+                <td>5,000,000</td>
+                <td>Cloudflare</td>
+                <td>$3.12</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Google</td>
+                <td>$79.12</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Azure</td>
+                <td>$98.75</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Note:</strong> Google has $18/mo minimum, Azure has $35/mo minimum, Cloudflare has no minimum</p>
+    
+    <p>Cloudflare is <strong>96-99% cheaper</strong> because:</p>
+    <ol>
+        <li>No bandwidth fees (competitors charge heavily for data transfer)</li>
+        <li>No monthly minimums (Google/Azure have $18-35 minimums)</li>
+        <li>Cloudflare uses R2 as a loss leader to attract customers for their security products (which we don't need)</li>
+    </ol>
+    
+    <h3 id="trade-off">Trade-off</h3>
+    <p>Think of DNS as the internet's phone book. When you type "jamppharma.com" into a browser, DNS is what translates that name into the actual IP address where the website is hosted.</p>
+    <p>Cloudflare can read the active DNS settings from our current provider and copy them over. We just update a setting to say "Cloudflare is managing this now".</p>
+    <p><strong>DNS is a "set it and forget it" service. Most companies don't touch it for years after setting it up.</strong></p>
+    
+    <h3 id="recommendation-1">Recommendation</h3>
+    <p>Use Cloudflare R2. The savings are substantial in the long-term and the service is reliable. Cloudflare powers ~40% of internet traffic among the top 1,000 most visited websites globally. This is the only case where a service is so much better than the Google alternative that it's worth the tradeoff.</p>
+    
+    <h3 id="what-i-need-1">What I need</h3>
+    <p><strong>IT admin to move the DNS management to Cloudflare and add me as a user.</strong></p>
+    
+    <script>
+        function toggleDiagram() {
+            const container = document.getElementById('diagram-container');
+            const buttonText = document.getElementById('diagram-button-text');
+            
+            if (container.classList.contains('show')) {
+                container.classList.remove('show');
+                buttonText.textContent = '▶ Show Containerization Diagram';
+            } else {
+                container.classList.add('show');
+                buttonText.textContent = '▼ Hide Containerization Diagram';
+            }
+        }
+    </script>
+</body>
+</html>
